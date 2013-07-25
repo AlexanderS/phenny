@@ -40,7 +40,7 @@ def run_phenny(config):
 
    def connect(config): 
       p = bot.Phenny(config)
-      p.run(config.host, config.port)
+      p.run(config.host, config.port, config.ssl)
 
    try: Watcher(config)
    except Exception, e: 
