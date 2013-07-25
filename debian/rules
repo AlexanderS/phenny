@@ -1,0 +1,16 @@
+#!/usr/bin/make -f
+
+DEBVERS := $(shell dpkg-parsechangelog | sed -n -e 's/^Version: //p')
+
+%:
+	dh $@
+
+override_dh_auto_build:
+
+override_dh_install:
+	cp *.py debian/phenny/usr/share/python-support/phenny/phenny
+	cp modules/*.py debian/phenny/usr/share/python-support/phenny/phenny/modules
+	chmod -R 644 debian/phenny/usr/share/python-support/phenny/phenny/*.py
+	chmod -R 644 debian/phenny/usr/share/python-support/phenny/phenny/modules/*.py
+	cp phenny debian/phenny/usr/bin
+	help2man -N -n "an extensible IRC bot written in Python" --version-string=$(DEBVERS) ./phenny > debian/phenny.1

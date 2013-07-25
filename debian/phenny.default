@@ -1,0 +1,13 @@
+# The user the phenny bot is executed as (defaults to nobody).
+#PHENNY_USER="nobody"
+
+# The group the phenny bot is executed as. If not specified the default group
+# of the PHENNY_USER is used.
+#PHENNY_GROUP=""
+
+# The config file or directory for the phenny bot(s). If it is a directory, for
+# each *.py file in it an own bot will start with that file as config.
+#PHENNY_CONFIG="/etc/phenny/"
+
+# Other opts to the phenny daemon.
+#PHENNY_OPTS=""
