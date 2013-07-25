@@ -1,3 +1,9 @@
+phenny (1:2~git90-2) unstable; urgency=low
+
+  * add init script and default file
+
+ -- Alexander Sulfrian <alex@spline.inf.fu-berlin.de>  Thu, 25 Jul 2013 22:13:43 +0200
+
 phenny (1:2~git90-1) unstable; urgency=low
 
   * removed debian patches

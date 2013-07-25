@@ -1,0 +1,85 @@
+#! /bin/sh
+### BEGIN INIT INFO
+# Provides:          phenny
+# Required-Start:    $local_fs $network
+# Required-Stop:     $local_fs $network
+# Should-Start:
+# Should-Stop:
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: Start/Stop the Phenny Bot
+### END INIT INFO
+
+DAEMON=/usr/bin/phenny
+NAME=phenny
+DESC="Phenny Bots"
+PIDDIR=/var/run/phenny
+
+PHENNY_USER=nobody
+PHENNY_GROUP=
+PHENNY_CONFIG=/etc/phenny/
+PHENNY_OPTS=
+
+if ! [ -x "/lib/lsb/init-functions" ]; then
+	. /lib/lsb/init-functions
+else
+	echo "E: /lib/lsb/init-functions not found, lsb-base (>= 3.0-6) needed"
+	exit 1
+fi
+
+# Include phenny defaults if available
+if [ -f "/etc/default/$NAME" ] ; then
+	. "/etc/default/$NAME"
+fi
+
+if [ -z "$PHENNY_USER" -o "$PHENNY_USER" = "root" ]; then
+	echo "PHENNY_USER not set or set to root. I will not start."
+	exit 1
+fi
+
+if [ -z "$PHENNY_CONFIG" ]; then
+	echo "PHENNY_CONFIG not set. I will not start."
+	exit 1
+fi
+
+#since /var/run can be wiped completly we create our run directory here
+if [ ! -d "$PIDDIR" ]; then 
+	mkdir "$PIDDIR"
+	chown "$PHENNY_USER:$PHENNY_GROUP" "$PIDDIR"
+fi
+
+case "$1" in
+  start)
+	log_daemon_msg "Starting $DESC" "$NAME"
+	start-stop-daemon --start \
+		--pidfile "$PIDDIR/$NAME.pid" \
+		--make-pidfile \
+		--chuid "$PHENNY_USER:$PHENNY_GROUP" \
+		--background \
+		--exec $DAEMON -- --config "$PHENNY_CONFIG" $PHENNY_OPTS
+	log_end_msg $?
+	;;
+  stop)
+	log_daemon_msg "Stopping $DESC" "$NAME"
+	start-stop-daemon --stop --quiet \
+		--pidfile "$PIDDIR/$NAME.pid" \
+		--user "$PHENNY_USER" \
+		--signal INT \
+		--retry 15
+	log_end_msg $?
+	;;
+  status)
+	status_of_proc -p "$PIDDIR/$NAME.pid" "$DESC" "$NAME" && exit 0 || exit $?
+	;;
+  restart)
+	$0 stop
+	sleep 1
+	$0 start
+	;;
+  *)
+	log_failure_msg "Usage: $0 {start|stop|restart}" 
+	exit 1
+	;;
+esac
+
+exit 0
