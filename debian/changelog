@@ -1,0 +1,75 @@
+phenny (1:2~git90-1) unstable; urgency=low
+
+  * removed debian patches
+  * fix indentation and trailing whitespaces
+  * add ssl support
+  * add pid setting for config to specify a pid path
+  * Make phenny kill its child threads then exit when it receives a SIGTERM signal.
+
+ -- Alexander Sulfrian <alex@spline.inf.fu-berlin.de>  Thu, 25 Jul 2013 19:42:20 +0200
+
+phenny (2~hg28-2) unstable; urgency=low
+
+  * Team upload.
+  * Drop 05_python-version.dpatch, set minimum required version via
+    XS-Python-Version and use unversioned interpreter in shebang
+    Closes: #596311
+
+ -- Piotr Ożarowski <piotr@debian.org>  Sun, 12 Sep 2010 16:41:19 +0200
+
+phenny (2~hg28-1) unstable; urgency=low
+
+  [ Noah Slater ]
+  * New upstream version, security fix and oblique command added.
+  * Added debian/README.source file.
+  * Updated debian/control, removed Build-Depends on cdbs.
+  * Updated debian/control, updated Build-Depends on debhelper to 7.2.11.
+  * Updated debian/control, changed Standards-Version to 3.8.1.
+  * Updated debian/control, changed Vcs-Browser.
+  * Updated debian/copyright, changed for latest proposed format.
+  * Updated debian/patches, converted all patches to dpatch system.
+  * Updated debian/patches/module-home.patch, relative home. Closes: #516038
+  * Updated debian/rules to use full debhelper system.
+  * Deleted debian/patches/bot-announce.patch, announce functionality.
+
+  [ Sandro Tosi ]
+  * debian/control
+    - switch Uploaders and Maintainer fields (package is team maintained)
+    - bump Standards-Version to 3.8.3 (no changes needed)
+
+ -- Python Applications Packaging Team <python-apps-team@lists.alioth.debian.org>  Thu, 15 Oct 2009 20:56:23 +0200
+
+phenny (2~hg16-1) unstable; urgency=low
+
+  * New upstream version, updated translation module.
+
+ -- Noah Slater <nslater@tumbolia.org>  Sat, 24 May 2008 18:21:36 +0100
+
+phenny (2~hg15-1) unstable; urgency=low
+
+  * New upstream version, updated translation module.
+
+ -- Noah Slater <nslater@tumbolia.org>  Tue, 20 May 2008 18:42:25 +0100
+
+phenny (2~hg14-1) unstable; urgency=low
+
+  * New upstream version.
+  * Updated debian/patches/command-option.patch, correct import. Closes: #478033
+  * Updated debian/copyright, changed for latest proposed format.
+
+ -- Noah Slater <nslater@tumbolia.org>  Mon, 28 Apr 2008 17:49:58 +0100
+
+phenny (2~hg11-2) unstable; urgency=medium
+
+  * Added debian/patches/bot-announce.patch, announce functionality.
+  * Updated debian/rules, general standards improvement.
+  * Updated debian/control, corrected Depends and Build-Depends-Indep on
+    versioned python. Closes: #471617
+
+ -- Noah Slater <nslater@tumbolia.org>  Sun, 30 Mar 2008 21:59:02 +0100
+
+phenny (2~hg11-1) unstable; urgency=low
+
+  * Initial release. Closes: #458095
+
+ -- Noah Slater <nslater@tumbolia.org>  Sun, 09 Mar 2008 14:42:05 +0100
