@@ -148,6 +148,9 @@ def main(argv=None):
       if not hasattr(module, 'password'): 
          module.password = None
 
+      if not hasattr(module, 'pid'):
+         module.pid = None
+
       if module.host == 'irc.example.net': 
          error = ('Error: you must edit the config file first!\n' + 
                   "You're currently using %s" % module.filename)
