@@ -1,0 +1,18 @@
+Source: phenny
+Section: python
+Priority: optional
+Maintainer: Python Applications Packaging Team <python-apps-team@lists.alioth.debian.org>
+Uploaders: Alexander Sulfrian <alex@spline.inf.fu-berlin.de>
+Standards-Version: 3.8.3
+Build-Depends: debhelper (>= 7.2.11), dpatch, git
+Build-Depends-Indep: help2man, dh-python, python
+Homepage: http://inamidst.com/phenny/
+X-Python-Version: >= 2.5
+
+Package: phenny
+Architecture: all
+Depends: ${python:Depends}, ${misc:Depends}
+Description: extensible IRC bot written in Python
+ Phenny is a lightweight IRC bot with the usual facilities that one expects such
+ as a Wordnet interface and thesaurus lookups. Modularly extensible with Python
+ and can reload modules on the fly.

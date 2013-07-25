@@ -1,0 +1,9 @@
+#!/usr/bin/make -f
+
+DEBVERS := $(shell dpkg-parsechangelog | sed -n -e 's/^Version: //p')
+
+%:
+	dh --with python2 $@
+
+override_dh_auto_build:
+	help2man -N -n "an extensible IRC bot written in Python" --version-string=$(DEBVERS) ./phenny > debian/phenny.1
