@@ -171,9 +171,7 @@ def main(argv=None):
 
    # Step Five: Initialise And Run The Phennies
 
-   # @@ ignore SIGHUP
-   for config_module in config_modules: 
-      run(config_module) # @@ thread this
+   run(config_modules)
 
 if __name__ == '__main__': 
    main()
