@@ -13,10 +13,15 @@ import bot
 class Watcher(object):
     # Cf. http://aspn.activestate.com/ASPN/Cookbook/Python/Recipe/496735
     def __init__(self):
-        self.child = os.fork()
-        if self.child != 0:
-            signal.signal(signal.SIGTERM, self.sig_term)
-            self.watch()
+        self._children = []
+        signal.signal(signal.SIGTERM, self.sig_term)
+
+    def add(self, config):
+        child = os.fork()
+        if child != 0:
+            self._children.append(child)
+        else:
+            run_phenny(config)
 
     def watch(self):
         try: os.wait()
@@ -25,8 +30,9 @@ class Watcher(object):
         sys.exit()
 
     def kill(self):
-        try: os.kill(self.child, signal.SIGKILL)
-        except OSError: pass
+        for child in self._children:
+            try: os.kill(child, signal.SIGKILL)
+            except OSError: pass
 
     def sig_term(self, signum, frame):
         self.kill()
@@ -41,10 +47,6 @@ def run_phenny(config):
         p = bot.Phenny(config)
         p.run(config.host, config.port, config.ssl)
 
-    try: Watcher()
-    except Exception, e:
-        print >> sys.stderr, 'Warning:', e, '(in __init__.py)'
-
     while True:
         try: connect(config)
         except KeyboardInterrupt:
@@ -57,11 +59,11 @@ def run_phenny(config):
         print >> sys.stderr, warning
         time.sleep(delay)
 
-def run(config):
-    t = threading.Thread(target=run_phenny, args=(config,))
-    if hasattr(t, 'run'):
-        t.run()
-    else: t.start()
+def run(configs):
+    w = Watcher()
+    for config in configs:
+        w.add(config)
+    w.watch()
 
 if __name__ == '__main__':
     print __doc__
