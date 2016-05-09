@@ -13,18 +13,31 @@ import bot
 class Watcher(object):
     # Cf. http://aspn.activestate.com/ASPN/Cookbook/Python/Recipe/496735
     def __init__(self):
+        self._configs = []
         self._children = []
         signal.signal(signal.SIGTERM, self.sig_term)
 
     def add(self, config):
+        self._configs.append(config)
+
+    def _start(self, config):
         child = os.fork()
         if child != 0:
             self._children.append(child)
         else:
             run_phenny(config)
 
+    def run(self):
+        for config in self._configs:
+            self._start(config)
+
     def watch(self):
-        try: os.wait()
+        self.run()
+
+        try:
+            proc = None
+            while proc not in self._children:
+                (proc, _) = os.wait()
         except KeyboardInterrupt:
             self.kill()
         sys.exit()
@@ -49,8 +62,8 @@ def run_phenny(config):
 
     while True:
         try: connect(config)
-        except KeyboardInterrupt:
-            sys.exit()
+        except KeyboardInterrupt, e:
+            raise e
 
         if not isinstance(delay, int):
             break
@@ -58,6 +71,7 @@ def run_phenny(config):
         warning = 'Warning: Disconnected. Reconnecting in %s seconds...' % delay
         print >> sys.stderr, warning
         time.sleep(delay)
+
 
 def run(configs):
     w = Watcher()
