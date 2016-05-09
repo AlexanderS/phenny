@@ -32,13 +32,17 @@ class Watcher(object):
             self._start(config)
 
     def watch(self):
-        self.run()
+        alive = True
+        while alive:
+            self.run()
 
-        try:
-            proc = None
-            while proc not in self._children:
-                (proc, _) = os.wait()
-        except KeyboardInterrupt:
+            try:
+                proc = None
+                while proc not in self._children:
+                    (proc, _) = os.wait()
+            except KeyboardInterrupt:
+                alive = False
+
             self.kill()
         sys.exit()
 
@@ -46,6 +50,7 @@ class Watcher(object):
         for child in self._children:
             try: os.kill(child, signal.SIGKILL)
             except OSError: pass
+        self._children = []
 
     def sig_term(self, signum, frame):
         self.kill()
