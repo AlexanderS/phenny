@@ -1,3 +1,9 @@
+phenny (1:2~git-2016-05-10~cd524df-1~bpo70+1) wheezy-backports; urgency=low
+
+  * Rebuild for wheezy-backports.
+
+ -- Alexander Sulfrian <alex@spline.inf.fu-berlin.de>  Tue, 10 May 2016 04:25:14 +0200
+
 phenny (1:2~git-2016-05-10~cd524df-1) unstable; urgency=low
 
   * Fix indentation and trailing whitespaces 
