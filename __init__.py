@@ -25,6 +25,7 @@ class Watcher(object):
         if child != 0:
             self._children.append(child)
         else:
+            signal.signal(signal.SIGTERM, signal.SIG_DFL)
             run_phenny(config)
 
     def run(self):
