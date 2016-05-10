@@ -14,7 +14,7 @@ class Watcher(object):
     # Cf. http://aspn.activestate.com/ASPN/Cookbook/Python/Recipe/496735
     def __init__(self):
         self._configs = []
-        self._children = []
+        self._children = {}
         signal.signal(signal.SIGTERM, self.sig_term)
 
     def add(self, config):
@@ -23,7 +23,7 @@ class Watcher(object):
     def _start(self, config):
         child = os.fork()
         if child != 0:
-            self._children.append(child)
+            self._children[child] = config
         else:
             signal.signal(signal.SIGTERM, signal.SIG_DFL)
             run_phenny(config)
@@ -33,18 +33,22 @@ class Watcher(object):
             self._start(config)
 
     def watch(self):
+        self.run()
+
         alive = True
         while alive:
-            self.run()
-
             try:
                 proc = None
                 while proc not in self._children:
                     (proc, _) = os.wait()
+
+                config = self._children[proc]
+                del self._children[proc]
+                self._start(config, True)
             except KeyboardInterrupt:
                 alive = False
 
-            self.kill()
+        self.kill()
         sys.exit()
 
     def kill(self):
