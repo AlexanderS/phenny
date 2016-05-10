@@ -20,13 +20,13 @@ class Watcher(object):
     def add(self, config):
         self._configs.append(config)
 
-    def _start(self, config):
+    def _start(self, config, restart=False):
         child = os.fork()
         if child != 0:
             self._children[child] = config
         else:
             signal.signal(signal.SIGTERM, signal.SIG_DFL)
-            run_phenny(config)
+            run_phenny(config, restart)
 
     def run(self):
         for config in self._configs:
@@ -61,7 +61,7 @@ class Watcher(object):
         self.kill()
         sys.exit()
 
-def run_phenny(config):
+def run_phenny(config, restart):
     if hasattr(config, 'delay'):
         delay = config.delay
     else: delay = 20
@@ -69,6 +69,11 @@ def run_phenny(config):
     def connect(config):
         p = bot.Phenny(config)
         p.run(config.host, config.port, config.ssl)
+
+    if restart:
+        warning = 'Reconnecting in %s seconds...' % delay
+        print >> sys.stderr, warning
+        time.sleep(delay)
 
     while True:
         try: connect(config)
